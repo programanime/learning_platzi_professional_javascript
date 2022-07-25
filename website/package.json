@@ -1,0 +1,25 @@
+{
+  "name": "platzi-media-player",
+  "version": "1.0.0",
+  "description": "curso de platzi js",
+  "license": "MIT",
+  "author": "programanime",
+  "keywords": [
+    "platzi"
+  ],
+  "scripts": {
+    "start": "http-server"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2",
+    "parcel-bundler": "^1.12.3",
+    "typescript": "^3.5.3"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ],
+  "dependencies": {
+    "@sparragus/platzimediaplayer": "^1.0.0"
+  }
+}
