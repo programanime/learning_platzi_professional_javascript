@@ -1,3 +1,10 @@
 import {MediaPlayer} from "./player.js";
-const player = new MediaPlayer(".movie", "#playButton", "#muteButton");
+import {AutoPlay} from "./plugins/AutoPlay.js";
+
+const player = new MediaPlayer(
+    ".movie", 
+    "#playButton", 
+    "#muteButton", 
+    [ new AutoPlay() ]
+);
 var nombre = "daniel";
