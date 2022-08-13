@@ -792,3 +792,41 @@ var player = {
 
 player.name = "daniel";
 ```
+
+# Proxy
+```shell
+npm install fast-levenshtein
+node
+```
+
+# Algorithm levenshtein Distance
+```javascript
+var levenshtein = require("fast-levenshtein");
+levenshtein.get("Javascript", "Java");
+
+var target =  {
+  red: "Red",
+  green: "Green",
+  blue: "Blue"
+};
+
+var handler = {
+  get(obj, prop){
+    if(prop in obj){
+      return obj[prop];
+    }else{
+      const keys = Object.keys(obj);
+      const wordWeights = Object.keys(obj).map( (id) => levenshtein.get(prop, id));
+      const minimumIndex = wordWeights.indexOf(Math.min(...wordWeights));
+      console.log(minimumIndex);
+      const similarProperty = keys[minimumIndex];
+      console.log(`did you mean ${similarProperty} ?`);
+    }
+  }
+};
+
+var proxy = new Proxy(target, handler);
+
+proxy.blu;
+proxy.blue;
+```
