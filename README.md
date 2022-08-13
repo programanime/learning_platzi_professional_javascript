@@ -800,6 +800,7 @@ node
 ```
 
 # Algorithm levenshtein Distance
+useful for intercept interactions with an object
 ```javascript
 var levenshtein = require("fast-levenshtein");
 levenshtein.get("Javascript", "Java");
@@ -807,7 +808,10 @@ levenshtein.get("Javascript", "Java");
 var target =  {
   red: "Red",
   green: "Green",
-  blue: "Blue"
+  blue: "Blue",
+  sayHi: () => {
+      console.log("hi");
+  }
 };
 
 var handler = {
@@ -822,11 +826,99 @@ var handler = {
       const similarProperty = keys[minimumIndex];
       console.log(`did you mean ${similarProperty} ?`);
     }
+  },
+  set(obj, prop, value){
+    if(prop=="name"){
+      console.log("you can't edit name");
+      return;
+    }
+    obj[prop] = value;
+  },
+  apply(targetFunction, thisArg, argumentsList){
+    console.log(targetFunction);
+    console.log(thisArg);
+    console.log(argumentsList);
+    targetFunction();
   }
 };
 
 var proxy = new Proxy(target, handler);
+var functionHandler = new Proxy(target.sayHi, handler);
 
 proxy.blu;
 proxy.blue;
+proxy.name = "daniel";
+proxy.name;
+proxy.other = "oth3e";
+proxy.other;
+
+proxy.sayHi();
+functionHandler();
+```
+
+# Generator - yield
+1. function*
+2. .next
+3. yield
+yield: return and pause 
+next: resume
+```javascript
+function* simpleGenerator(){
+  yield 1;
+  const value = yield 2;
+  console.log(`the final value is ${value}`);
+  yield 3;
+};
+
+var generator = simpleGenerator();
+generator.next(1).value;
+```
+```javascript
+function* fibonacci(){
+  let pair = [0,1];
+  let sum;
+  while(true){
+    sum = pair[0] + pair[1];
+    yield sum;
+    pair = [pair[1], sum];
+  }
+}
+
+var fibonacciGenerator = fibonacci();
+fibonacciGenerator.next();
+
+var i=0;
+while(true){
+  console.log(fibonacciGenerator.next());
+  i+=1;
+  if(i==10)break;
+}
+```
+
+# XmlHttpRequest - AJAX
+# Fetch abort , cancel
+cancel a fetch request
+[execute here](https://old-releases.ubuntu.com/releases/impish)
+```javascript
+let controller = new AbortController();
+async function consume(){
+  const response = await fetch(
+    "https://old-releases.ubuntu.com/releases/impish/ubuntu-21.10-desktop-amd64.iso",
+    {signal:controller.signal}
+  );
+  const blob = await response.blob();
+  // const url = URL.createObjectURL(blob);
+  // img.src = url;
+  return blob;
+}
+
+async function getValue(){
+  const response = await consume();
+  console.log(response);
+}
+
+getValue();
+setTimeout(function(){  
+  controller.abort();
+}, 10000);
 ```
